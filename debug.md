@@ -48,3 +48,33 @@
    (gdb) symbol-file ./kernel.o
    ```
    이 명령은 현재 디버깅 중인 프로세스에 kernel.o의 심볼(디버깅 정보)을 연결합니다.
+
+
+
+### 디버깅 방법 2
+
+
+
+- 서버에서 프로그램 실행
+
+```bash
+pintos --gdb -v -k -T 48000 -m 20   -- -q   run priority-condvar
+```
+
+
+- 로컬에서 아래처럼 실행
+
+  ```bash
+  gdb
+  ```
+    
+  ```gdb
+    rmt
+    directory threads/build
+    file threads/build/kernel.o
+    info functions -n
+  ```
+
+
+
+
