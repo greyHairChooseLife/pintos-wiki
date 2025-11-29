@@ -1,6 +1,19 @@
 # thread creation flow
 
 
+**요약**
+
+thread_create()
+=> kernel_thread()
+=> initd()
+   - kill context (page dir)
+   - create new trap_frame sturct
+   - page allocation for user VM
+   - load segments from ELF executable into user VM
+   - `tf->rip = ELF_header.entry_point`
+   - do_iret(trap_frame)
+
+
 
 ## 관련 코드
 
