@@ -1,3 +1,8 @@
+> [!nt]
+>
+> - VPN stands for Virtual Page Number
+> - PFN stands for Physical Frame Number
+
 
 ## 1. 주소 변환 개요 (VA to PA)
 
@@ -11,6 +16,7 @@ x86-64 가상 주소(Virtual Address, 64비트 중 하위 48비트 사용)는 �
     *   **Page Offset (12 bits):** 4KB 페이지 내에서의 위치
 
 PTE는 "이 페이지가 물리 메모리 어디(Base Address)에 있는가"를 알려주고, **Offset**은 그 시작점에서 얼마나 떨어져 있는지를 나타내므로 변환 없이 그대로 물리 주소의 하위 비트로 붙습니다.
+
 
 ## 2. Page Table Entry (PTE) 구조 (64 bits)
 
@@ -32,6 +38,9 @@ PTE는 64비트(8바이트) 크기이며, 각 비트는 다음과 같은 역할�
 | **52-62** | Ignored | OS가 임의로 사용 가능. |
 | **63 (XD)** | **Execute Disable** | 1이면 해당 페이지에서 코드 실행 불가 (NX bit, 보안 기능). |
 
+- 참고: VPN(가상 주소 인덱스)는 36비트지만, 물리 주소 공간은 아키텍처상 최대 52비트까지 지원하므로 PFN은 40비트가 할당됨
+
+
 ## 3. 요약 및 흐름
 
 1.  CPU가 가상 주소에 접근합니다.
@@ -43,6 +52,7 @@ PTE는 64비트(8바이트) 크기이며, 각 비트는 다음과 같은 역할�
     * 현재 실행 모드(CPL)와 접근 유형(Read/Write/Execute)이 PTE의 설정(R/W, U/S, NX)과 일치하는지 검사합니다.
 6.  권한이 맞다면, **PTE의 Physical Address(12~51비트)** 를 가져옵니다.
 7.  가상 주소의 **Offset(0~11비트)** 을 그대로 가져와 물리 주소 뒤에 붙여 최종 물리 주소를 완성합니다.
+
 
 ## C 언어 구조체 예시 (Linux 커널 스타일)
 
